@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class Attendance Manager</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1><i class="fas fa-graduation-cap"></i> Class Attendance Manager</h1>
+                <div class="date-display">
+                    <span id="current-date"></span>
+                    <span id="current-time"></span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="nav-tabs">
+            <button class="nav-tab active" data-tab="dashboard">
+                <i class="fas fa-tachometer-alt"></i> Dashboard
+            </button>
+            <button class="nav-tab" data-tab="attendance">
+                <i class="fas fa-clipboard-check"></i> Mark Attendance
+            </button>
+            <button class="nav-tab" data-tab="students">
+                <i class="fas fa-users"></i> Manage Students
+            </button>
+            <button class="nav-tab" data-tab="reports">
+                <i class="fas fa-chart-bar"></i> Reports
+            </button>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Dashboard Tab -->
+            <div id="dashboard" class="tab-content active">
+                <div class="dashboard-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="total-students">0</h3>
+                            <p>Total Students</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon present">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="present-today">0</h3>
+                            <p>Present Today</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon absent">
+                            <i class="fas fa-times-circle"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="absent-today">0</h3>
+                            <p>Absent Today</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="attendance-rate">0%</h3>
+                            <p>Attendance Rate</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="recent-activity">
+                    <h2>Recent Activity</h2>
+                    <div id="recent-activity-list" class="activity-list">
+                        <p class="no-data">No recent activity</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Attendance Tab -->
+            <div id="attendance" class="tab-content">
+                <div class="attendance-header">
+                    <h2>Mark Attendance</h2>
+                    <div class="attendance-controls">
+                        <button id="mark-all-present" class="btn btn-success">
+                            <i class="fas fa-check-double"></i> Mark All Present
+                        </button>
+                        <button id="mark-all-absent" class="btn btn-danger">
+                            <i class="fas fa-times"></i> Mark All Absent
+                        </button>
+                        <button id="clear-attendance" class="btn btn-warning">
+                            <i class="fas fa-eraser"></i> Clear Today
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="attendance-list" class="attendance-list">
+                    <p class="no-data">No students added yet. Add students first.</p>
+                </div>
+            </div>
+
+            <!-- Students Tab -->
+            <div id="students" class="tab-content">
+                <div class="students-header">
+                    <h2>Manage Students</h2>
+                    <button id="add-student-btn" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Add Student
+                    </button>
+                </div>
+                
+                <div id="students-list" class="students-list">
+                    <p class="no-data">No students added yet.</p>
+                </div>
+            </div>
+
+            <!-- Reports Tab -->
+            <div id="reports" class="tab-content">
+                <div class="reports-header">
+                    <h2>Attendance Reports</h2>
+                    <div class="report-controls">
+                        <select id="report-period">
+                            <option value="7">Last 7 Days</option>
+                            <option value="30">Last 30 Days</option>
+                            <option value="90">Last 90 Days</option>
+                            <option value="all">All Time</option>
+                        </select>
+                        <button id="export-report" class="btn btn-secondary">
+                            <i class="fas fa-download"></i> Export
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="reports-content" class="reports-content">
+                    <div class="report-summary">
+                        <h3>Summary</h3>
+                        <div id="report-summary-data"></div>
+                    </div>
+                    <div class="report-details">
+                        <h3>Detailed Report</h3>
+                        <div id="report-details-data"></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Add Student Modal -->
+    <div id="add-student-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add New Student</h3>
+                <span class="close">&times;</span>
+            </div>
+            <form id="add-student-form">
+                <div class="form-group">
+                    <label for="student-name">Full Name</label>
+                    <input type="text" id="student-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="student-id">Student ID</label>
+                    <input type="text" id="student-id" required>
+                </div>
+                <div class="form-group">
+                    <label for="student-email">Email (Optional)</label>
+                    <input type="email" id="student-email">
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="cancel-add">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Add Student</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Student Modal -->
+    <div id="edit-student-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Edit Student</h3>
+                <span class="close">&times;</span>
+            </div>
+            <form id="edit-student-form">
+                <input type="hidden" id="edit-student-index">
+                <div class="form-group">
+                    <label for="edit-student-name">Full Name</label>
+                    <input type="text" id="edit-student-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-student-id">Student ID</label>
+                    <input type="text" id="edit-student-id" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-student-email">Email (Optional)</label>
+                    <input type="email" id="edit-student-email">
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="cancel-edit">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Update Student</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 
